@@ -5,7 +5,7 @@ import jax.numpy as jnp
 from constants import (
     N_POINTS_X, N_POINTS_Y, BODY_CENTER_IDX_X, BODY_CENTER_IDX_Y,
     BODY_RADIUS_IDX, N, REYNOLDS_NUM, MAX_INFLOW_VELOCITY,
-    VIZUALIZE, PLOT_EVERY_N_STEPS, SKIP_FIRST_N_ITER,
+    VISUALIZE, PLOT_EVERY_N_STEPS, SKIP_FIRST_N_ITER,
     N_DISCRETE_VELOCITIES, LATTICE_VELOCITIES, LATTICE_IDX,
     OPP_LATTICE_IDX, RIGHT_VELOCITIES, LEFT_VELOCITIES,
     UP_VELOCITIES, DOWN_VELOCITIES, PURE_VERTICAL_VELOCITIES,
@@ -22,16 +22,16 @@ def get_macroscopic_velocities(discrete_velocities, density):
         # discrete dim: N * M * Q (points x * points y * num discrete vel.)
         # lattice dim: d * Q (macro * microscopic velocities)
         # output: N * M * d (points x * points y * macro dim.)
-    summation = jnp.einsum("NMQm,dQ->NMd", discrete_velocities, LATTICE_VELOCITIES)
+    summation = jnp.einsum("NMQ,dQ->NMd", discrete_velocities, LATTICE_VELOCITIES)
     # must add dummy axis for dimensionality
     macroscopic_velocities = summation / density[..., jnp.newaxis]
     return macroscopic_velocities
 
 def get_equilibrium_discrete_velocities(macroscopic_velocities, density):
 
-    projected_discrete_velocities = jnp.einsum("dQ,NMD->NMQ",LATTICE_VELOCITIES, macroscopic_velocities)
+    projected_discrete_velocities = jnp.einsum("dQ,NMd->NMQ",LATTICE_VELOCITIES, macroscopic_velocities)
 
-    macro_velocity_mag = jnp.linalg.norm(macroscopic_velocities, axis = -1, order=2)
+    macro_velocity_mag = jnp.linalg.norm(macroscopic_velocities, axis = -1, ord=2)
 
     equilibrium_discrete_velocities = (
         density[..., jnp.newaxis] * 

@@ -13,9 +13,9 @@ BODY_RADIUS_IDX = N_POINTS_Y // 9
 N = 15000
 REYNOLDS_NUM = 80
 MAX_INFLOW_VELOCITY = 0.04
-VIZUALIZE = True
+VISUALIZE = True
 PLOT_EVERY_N_STEPS = 100
-SKIP_FIRST_N_ITER = 0
+SKIP_FIRST_N_ITER = 5000
 
 # set up D2Q9 lbm grid
 N_DISCRETE_VELOCITIES = 9
@@ -35,6 +35,6 @@ PURE_HORIZONTAL_VELOCITIES = jnp.array([0, 1, 3])
 # related to navier stokes (out of scope :p)
 LATTICE_WEIGHTS = jnp.array([
     4/9,                    # center
-    1/9, 1/9/ 1/9, 1/9,     # axis-aligned
+    1/9, 1/9, 1/9, 1/9,     # axis-aligned
     1/36, 1/36, 1/36, 1/36  # 45 deg.
 ])
